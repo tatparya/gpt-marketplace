@@ -1,6 +1,12 @@
 import React from 'react';
 
-const AgentCard = ({ title, imageUrl, description, onClick }) => {
+const AgentCard = ({ title, imageUrl, description, agentUrl, onClick }) => {
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevent onClick of the card
+    console.log(agentUrl);
+    window.open(agentUrl, '_blank');
+  };
+
   return (
     <div className="card h-150 card-hover-shadow" style={{ width: "18rem" }} onClick={onClick}>
       <div style={{ height: '200px', overflow: 'hidden' }}>
@@ -9,11 +15,10 @@ const AgentCard = ({ title, imageUrl, description, onClick }) => {
       <div className="card-body d-flex flex-column">
         <h5 className="card-title">{title}</h5>
         <p className="card-text" style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: '3', WebkitBoxOrient: 'vertical' }}>{description}</p>
-        {/* Additional elements like buttons can be added here if needed */}
+        <button onClick={handleButtonClick} className="btn btn-primary mt-auto">Visit Agent</button>
       </div>
     </div>
   );
 };
-
 
 export default AgentCard;

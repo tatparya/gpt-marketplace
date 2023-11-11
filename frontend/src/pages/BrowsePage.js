@@ -76,6 +76,7 @@ const BrowsePage = () => {
               imageUrl={agent.imageUrl}
               description={agent.description}
               onClick={() => handleCardClick(agent)}
+              agentUrl={agent.url}
             />
           </div>
         ))}
