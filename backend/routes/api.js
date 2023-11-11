@@ -6,6 +6,7 @@ const router = express.Router();
 const { verifyToken } = require('../middleware/authMiddleware');
 const { admin } = require('../services/firebase-admin');
 
+// Helper functions
 const getMetadataFromUrl = async (url) => {
   try {
     const response = await axios.get(url);
@@ -14,7 +15,7 @@ const getMetadataFromUrl = async (url) => {
 
     const title = $('meta[property="og:title"]').attr('content') || $('title').text();
     const imageUrl = $('meta[property="og:image"]').attr('content');
-    console.log(title, imageUrl)
+    console.log(title, imageUrl);
 
     return { title, imageUrl };
   } catch (error) {
@@ -38,26 +39,37 @@ const urlExists = async (url) => {
   return !snapshot.empty;
 };
 
-
-// Verify URL
+// Verify URL and get metadata
 router.post('/agents/check-url', verifyToken, async (req, res) => {
   try {
     const { url } = req.body;
 
     if (!isValidUrl(url)) {
-      res.status(403).send('Invalid URL');
+      return res.status(403).send('Invalid URL');
     }
+
     const exists = await urlExists(url);
-    res.json({ exists: exists });
+    if (exists) {
+      return res.json({ exists });
+    }
+
+    // Fetch metadata if URL does not exist in the database
+    const metadata = await getMetadataFromUrl(url);
+    if (metadata.title || metadata.imageUrl) {
+      res.json({ exists: false, title: metadata.title, imageUrl: metadata.imageUrl });
+    } else {
+      res.status(404).send('Metadata not found');
+    }
   } catch (error) {
-    console.log(error)
+    console.error(error);
     res.status(500).send('Server error');
   }
 });
 
 // Add new agent to DB
 router.post('/agents/add', verifyToken, async (req, res) => {
-  const { url, description } = req.body;
+  const { url, title, imageUrl, description } = req.body;
+
   if (!url) {
     return res.status(400).send('URL is required');
   }
@@ -68,12 +80,10 @@ router.post('/agents/add', verifyToken, async (req, res) => {
       return res.status(409).send('Agent with this URL already exists');
     }
 
-    const meta = await getMetadataFromUrl(url);
-
     const agentData = {
       userId: req.user.uid,
-      title: meta.title,
-      imageUrl: meta.imageUrl,
+      title,       // Use the title provided in the request
+      imageUrl,    // Use the imageUrl provided in the request
       url,
       description,
       added: admin.firestore.Timestamp.now(),
@@ -88,6 +98,7 @@ router.post('/agents/add', verifyToken, async (req, res) => {
 });
 
 
+
 router.get('/agents', async (req, res) => {
   try {
     const agentsRef = admin.firestore().collection('agents-meta');
@@ -96,7 +107,7 @@ router.get('/agents', async (req, res) => {
     const agents = [];
     snapshot.forEach(doc => {
       let agentData = doc.data();
-      agentData.id = doc.id; // Optional: include document ID
+      agentData.id = doc.id;
       agents.push(agentData);
     });
 

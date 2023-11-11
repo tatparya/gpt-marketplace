@@ -32,6 +32,7 @@ const Login = () => {
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
+      navigate('/');
       // ...
     }).catch((error) => {
       // Handle Errors here.
@@ -47,7 +48,7 @@ const Login = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title text-center">Login</h5>
+              <h4 className="card-title text-center">Login</h4>
               <form onSubmit={handleLoginWithEmail} className="mt-4">
                 <div className="mb-3">
                   <input

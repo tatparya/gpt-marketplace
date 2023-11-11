@@ -6,14 +6,15 @@ import Footer from './components/Footer';
 import BrowsePage from './pages/BrowsePage';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
-import DashboardPage from './pages/DashboardPage'; // If you have a dashboard page
+import DashboardPage from './pages/DashboardPage';
+import AddAgentPage from './pages/AddAgentPage';
 
 import { UserProvider, UserContext } from './contexts/UserContext';
 
 // A component to handle private routes
 function PrivateRoute({ children }) {
   const { currentUser } = useContext(UserContext);
-  return currentUser ? children : <Navigate to="/browse" />;
+  return currentUser ? children : <Navigate to="/login" />;
 }
 
 function App() {
@@ -32,7 +33,16 @@ function App() {
                 path="/dashboard"
                 element={
                   <PrivateRoute>
-                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <DashboardPage />
+                  </PrivateRoute>
+                }
+              />
+              {/* Implementing a private route for AddAgentPage */}
+              <Route
+                path="/add-agent"
+                element={
+                  <PrivateRoute>
+                    <AddAgentPage />
                   </PrivateRoute>
                 }
               />
