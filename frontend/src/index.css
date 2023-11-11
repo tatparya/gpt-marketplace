@@ -12,3 +12,9 @@
 .modal-open .container-fluid, .modal-open  .container {
     -webkit-filter: blur(5px) grayscale(90%);
 }
+
+.card-hover-shadow:hover {
+  transform: scale(1.03);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}

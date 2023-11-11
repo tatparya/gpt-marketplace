@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AgentCard from '../components/AgentCardComponent';
+import AgentDetailModal from '../components/AgentDetailModal';
 
 const BrowsePage = () => {
   const [agents, setAgents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  const handleCardClick = (agent) => {
+    setSelectedAgent(agent);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedAgent(null);
+  };
 
   useEffect(() => {
     const fetchAgents = async () => {
@@ -62,10 +75,19 @@ const BrowsePage = () => {
               title={agent.title}
               imageUrl={agent.imageUrl}
               description={agent.description}
+              onClick={() => handleCardClick(agent)}
             />
           </div>
         ))}
       </div>
+
+      {selectedAgent && (
+        <AgentDetailModal
+          show={showModal}
+          handleClose={handleCloseModal}
+          agent={selectedAgent}
+        />
+      )}
     </div>
   );
 };

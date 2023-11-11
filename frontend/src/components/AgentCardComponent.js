@@ -1,8 +1,8 @@
 import React from 'react';
 
-const AgentCard = ({ title, imageUrl, description }) => {
+const AgentCard = ({ title, imageUrl, description, onClick }) => {
   return (
-    <div className="card h-100" style={{ width: '18rem' }}>
+    <div className="card h-150 card-hover-shadow" style={{ width: "18rem" }} onClick={onClick}>
       <div style={{ height: '200px', overflow: 'hidden' }}>
         <img src={imageUrl} className="card-img-top" alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
@@ -14,5 +14,6 @@ const AgentCard = ({ title, imageUrl, description }) => {
     </div>
   );
 };
+
 
 export default AgentCard;

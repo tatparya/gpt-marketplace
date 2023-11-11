@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 
-const AgentDetailModal = () => {
-  const { agentId } = useParams();
-  const [agent, setAgent] = useState(null);
-
-  useEffect(() => {
-    // Fetch details of the GPT agent from Firebase using agentId
-  }, [agentId]);
-
-  if (!agent) {
-    return <div>Loading...</div>;
-  }
-
+const AgentDetailModal = ({ show, handleClose, agent }) => {
   return (
-    <div>
-      <h2>{agent.name}</h2>
-      {/* Display detailed information about the agent */}
-      <p>{agent.description}</p>
-      {/* Add Rating and Review components */}
+    <div className={`modal ${show ? 'd-block' : 'd-none'}`} tabIndex="-1">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">{agent.title}</h5>
+            <button type="button" className="btn-close" onClick={handleClose}></button>
+          </div>
+          <div className="modal-body">
+            {agent.imageUrl && <img src={agent.imageUrl} className="card-img-top" alt={agent.title} />}
+            <p className="mt-3">{agent.description}</p>
+            {/* Future content like ratings and reviews will go here */}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
