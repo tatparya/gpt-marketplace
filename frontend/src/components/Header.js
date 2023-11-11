@@ -49,10 +49,10 @@ const Header = () => {
           ) : (
             <>
               <li className="nav-item">
-                <Link className="btn btn-outline-success my-2 my-sm-0" to="/login">Login</Link>
+                <Link className="btn btn-outline-success my-2 mx-2 my-sm-0" to="/login">Login</Link>
               </li>
               <li className="nav-item">
-                <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signup">Sign Up</Link>
+                <Link className="btn btn-outline-primary my-2 mx-2 my-sm-0" to="/signup">Sign Up</Link>
               </li>
             </>
           )}
